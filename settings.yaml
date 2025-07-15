@@ -1,0 +1,6 @@
+---
+info:
+  title: "Fortune Cookies API"
+  version: 0.0.1
+
+db_connection_string: "sqlite+aiosqlite:///store/app.db"

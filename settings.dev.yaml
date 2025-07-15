@@ -1,0 +1,3 @@
+# DEV environment specific settings
+# These settings are used if APP_ENV is set to "dev"
+db_connection_string: "sqlite+aiosqlite:///store/app.db"

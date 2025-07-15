@@ -1,0 +1,19 @@
+{%- extends "layout.jinja" -%}
+{%- block title -%}
+Fortune Cookies
+{%- endblock -%}
+{%- block description -%}
+Project template to create web applications with MVC architecture using BlackSheep web framework.
+{%- endblock -%}
+{%- block css -%}
+<link rel="stylesheet" href="{{absurl()}}styles/public.css" />
+{%- endblock -%}
+{%- block body -%}
+
+<div>
+    <p class="cookie"><i>🥠&nbsp;</i>{{cookie.text}}</p>
+</div>
+
+{%- endblock -%}
+{%- block js -%}
+{%- endblock -%}
