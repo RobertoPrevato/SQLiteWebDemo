@@ -26,6 +26,8 @@ RUN apt-get update && apt-get install make \
     wget
 COPY . /home
 RUN python -m venv venv && . venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
+# The following line is for creating a default SQLite database
+RUN mkdir store && . venv/bin/activate && ./newdb.sh
 
 EXPOSE 80
 
@@ -33,7 +35,7 @@ FROM python:3.13.1-slim
 WORKDIR /home
 COPY --from=server_builder /home/ /home/
 
-ENV APP_ENV=prod BG_COLOR="#1abc9c" APP_ROUTE_PREFIX=""
+ENV APP_ENV=prod APP_ROUTE_PREFIX=""
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 RUN apt-get update && apt-get install \
     ca-certificates \

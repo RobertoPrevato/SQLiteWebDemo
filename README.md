@@ -61,3 +61,9 @@ Run the image once built, for example to map from the host `8080`:
 ```bash
 docker run --rm -p 8080:80 fortunecookies
 ```
+
+To use a mount for the database file, you can use the following command:
+
+```bash
+docker run --rm -p 8080:80 --name fortune -v ./store/:/home/store/ fortunecookies
+```
