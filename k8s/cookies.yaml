@@ -19,6 +19,7 @@ spec:
       containers:
         - name: fortune-cookies
           image: robertoprevato/fortunecookies:latest
+          env:
             - name: APP_ROUTE_PREFIX
               value: cookies
           ports:
@@ -35,6 +36,14 @@ spec:
               port: 80
             initialDelaySeconds: 15
             periodSeconds: 20
+          volumeMounts:
+            - name: store-volume
+              mountPath: /home/store
+      volumes:
+        - name: store-volume
+          hostPath:
+            path: /home/stores/cookies
+            type: Directory
 ---
 apiVersion: v1
 kind: Service

@@ -53,7 +53,7 @@ APP_ROUTE_PREFIX="cookies" python dev.py
 Build an image using the example image.
 
 ```bash
-docker build -t fortunecookies .
+docker build -t fortunecookies:0.0.1 .
 ```
 
 Run the image once built, for example to map from the host `8080`:
