@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install make \
 COPY . /home
 RUN python -m venv venv && . venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
 # The following line is for creating a default SQLite database
-RUN mkdir store && . venv/bin/activate && ./newdb.sh
+RUN mkdir store && . venv/bin/activate && chmod +x newdb.sh && ./newdb.sh
 
 EXPOSE 80
 
