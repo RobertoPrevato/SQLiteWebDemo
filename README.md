@@ -50,7 +50,7 @@ APP_ROUTE_PREFIX="cookies" python dev.py
 
 ### Docker
 
-Build an image using the example image.
+Build an image using the provided Dockerfile.
 
 ```bash
 docker build -t fortunecookies:0.0.1 .
