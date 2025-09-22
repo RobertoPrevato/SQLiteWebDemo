@@ -1,12 +1,36 @@
 import logging
 import logging.handlers
+import os
 import sys
 from pathlib import Path
 
+from blacksheep.server.otel.otlp import use_open_telemetry
+from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
-def configure_logging():
+
+def _configure_otlp(app, logger):
+    otel_exporter_otlp_endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
+
+    if otel_exporter_otlp_endpoint is None:
+        return
+
+    if "OTEL_RESOURCE_ATTRIBUTES" not in os.environ:
+        os.environ["OTEL_RESOURCE_ATTRIBUTES"] = (
+            "service.name=fortunecookies,service.namespace=fortunecookies,"
+            "deployment.environment=production"
+        )
+
+    logger.info("Configuring OTLP Exporters…")
+    use_open_telemetry(app, OTLPLogExporter(), OTLPSpanExporter())
+
+
+def configure_logging(app):
     """
     Configures a logger named 'app' that writes to a log file.
+
+    If OTEL_EXPORTER_OTLP_ENDPOINT env variable is set, it configures OpenTelemetry
+    logs using the OTLP protocol.
     """
     # Create logs directory if it doesn't exist
     log_dir = Path("logs")
@@ -45,5 +69,8 @@ def configure_logging():
     logger.addHandler(file_handler)
     logger.addHandler(stdout_handler)
     logger.addHandler(stderr_handler)
+
+    # Try configurin OTLP exporter
+    _configure_otlp(app, logger)
 
     return logger

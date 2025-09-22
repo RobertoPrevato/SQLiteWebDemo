@@ -35,7 +35,7 @@ FROM python:3.13.1-slim
 WORKDIR /home
 COPY --from=server_builder /home/ /home/
 
-ENV APP_ENV=prod APP_ROUTE_PREFIX=""
+ENV APP_ENV=prod APP_ROUTE_PREFIX="" OTEL_EXPORTER_OTLP_ENDPOINT="" OTEL_EXPORTER_OTLP_HEADERS="" OTEL_EXPORTER_OTLP_PROTOCOL="" OTEL_RESOURCE_ATTRIBUTES=""
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 RUN apt-get update && apt-get install \
     ca-certificates \

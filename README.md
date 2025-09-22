@@ -67,3 +67,15 @@ To use a mount for the database file, you can use the following command:
 ```bash
 docker run --rm -p 8080:80 --name fortune -v ./store/:/home/store/ fortunecookies
 ```
+
+## Using the image from Docker Hub
+
+Initialize a database in a new mount this way (replace `./example/` with the desired local folder):
+
+```bash
+docker run --rm -v ./example/:/home/store/ robertoprevato/fortunecookies sh -c ". venv/bin/activate && alembic upgrade head"
+```
+
+```bash
+docker run --rm -p 8080:80 --name fortune -v ./example/:/home/store/ robertoprevato/fortunecookies
+```
