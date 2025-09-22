@@ -10,9 +10,9 @@ on:
         default: false
       tag:
         description: "Image tag"
-        required: true
+        required: false
         type: string
-        default: "0.0.1"
+        default: ""
 
   push:
     branches:
@@ -38,8 +38,9 @@ jobs:
           fi
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest \
-                          -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.TAG }} .
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest \
+                       -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.TAG }} .
 
       - name: Log in to DockerHub
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy_to_dockerhub == 'true')
