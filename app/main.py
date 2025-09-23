@@ -28,7 +28,7 @@ def configure_application(
     use_sqlalchemy(app, connection_string=settings.db_connection_string)
 
     app.serve_files("app/static")
-    configure_logging()
+    configure_logging(app)
     configure_error_handlers(app)
     configure_authentication(app, settings)
     configure_docs(app, settings)
