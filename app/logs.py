@@ -31,7 +31,7 @@ def _configure_otlp(app, logger):
     # For the sake of the OTEL example, configure also a Metric Exporter.
     # Set up the OTLP exporter to send to your collector (default localhost:4317)
     exporter = OTLPMetricExporter(insecure=True)
-    reader = PeriodicExportingMetricReader(exporter)
+    reader = PeriodicExportingMetricReader(exporter, export_interval_millis=5000)
     provider = MeterProvider(metric_readers=[reader])
     metrics.set_meter_provider(provider)
 
