@@ -5,8 +5,12 @@ import sys
 from pathlib import Path
 
 from blacksheep.server.otel.otlp import use_open_telemetry
+from opentelemetry import metrics
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 
 
 def _configure_otlp(app, logger):
@@ -23,6 +27,28 @@ def _configure_otlp(app, logger):
 
     logger.info("Configuring OTLP Exporters…")
     use_open_telemetry(app, OTLPLogExporter(), OTLPSpanExporter())
+
+    # For the sake of the OTEL example, configure also a Metric Exporter.
+    # Set up the OTLP exporter to send to your collector (default localhost:4317)
+    exporter = OTLPMetricExporter(insecure=True)
+    reader = PeriodicExportingMetricReader(exporter)
+    provider = MeterProvider(metric_readers=[reader])
+    metrics.set_meter_provider(provider)
+
+    # The following is just an example to collect metrics and
+    # test sending metrics to the OTLP endpoint:
+    meter = metrics.get_meter(__name__)
+    request_counter = meter.create_counter(
+        name="otel_web_requests",
+        description="Requests count",
+        unit="1",
+    )
+
+    async def req_count_middleware(request, handler):
+        request_counter.add(1, {"endpoint": request.route})
+        return await handler(request)
+
+    app.middlewares.append(req_count_middleware)
 
 
 def configure_logging(app):

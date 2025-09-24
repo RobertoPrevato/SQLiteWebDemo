@@ -52,7 +52,8 @@ class OTELTests(Controller):
 
     @get("/{name}")
     async def greetings(self, name: str) -> Response:
-        """Raises an exception to see how they get logged."""
+        """Returns an 'Hello, {name}' message."""
+        logger.info("Saying Hi to %s", name)
         return self.text(f"Hello, {name}!")
 
     @get("/crash")
